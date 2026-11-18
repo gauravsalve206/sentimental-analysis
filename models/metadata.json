@@ -1,0 +1,16 @@
+{
+  "dataset": "McAuley-Lab/Amazon-Reviews-2023/raw_review_All_Beauty",
+  "dataset_url": "https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023",
+  "source_rows": 29153,
+  "train_rows": 23322,
+  "test_rows": 5831,
+  "random_seed": 42,
+  "label_strategy": {
+    "1-2": "Negative",
+    "3": "Neutral",
+    "4-5": "Positive"
+  },
+  "best_model": "Logistic Regression",
+  "best_f1_macro": 0.7293872875083042,
+  "best_accuracy": 0.7281769850797462
+}
