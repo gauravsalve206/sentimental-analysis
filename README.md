@@ -27,7 +27,7 @@ Rating 1–2 is treated as Negative, rating 3 as Neutral, and rating 4–5 as Po
 
 ## Planned Structure
 
-- `app/` — Streamlit application
+- `app/` — Flask application and modern dashboard
 - `data/raw/` — downloaded source data
 - `data/processed/` — cleaned, reproducible datasets
 - `src/` — preprocessing, training, prediction, and aspect modules
@@ -40,8 +40,11 @@ Rating 1–2 is treated as Negative, rating 3 as Neutral, and rating 4–5 as Po
 ## Run the Dashboard
 
 ```powershell
-.\.venv310\Scripts\python.exe -m streamlit run app\app.py
+.\.venv310\Scripts\python.exe -m pip install flask
+.\.venv310\Scripts\python.exe app\app.py
 ```
+
+Open `http://127.0.0.1:5000` in a browser.
 
 ## Train or Reproduce Models
 

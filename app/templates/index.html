@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reviewly — Sentiment Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#" data-page="home"><span class="brand-mark">R</span><span>Reviewly</span></a>
+    <nav class="nav-list">
+      <button class="nav-item active" data-page="home"><span class="nav-icon">⌂</span><span>Overview</span></button>
+      <button class="nav-item" data-page="analyzer"><span class="nav-icon">✦</span><span>Review Analyzer</span></button>
+      <button class="nav-item" data-page="bulk"><span class="nav-icon">⇧</span><span>Bulk Analysis</span></button>
+      <button class="nav-item" data-page="analytics"><span class="nav-icon">◫</span><span>Analytics</span></button>
+      <button class="nav-item" data-page="comparison"><span class="nav-icon">⇄</span><span>Compare</span></button>
+      <button class="nav-item" data-page="model"><span class="nav-icon">◎</span><span>Model</span></button>
+    </nav>
+    <div class="sidebar-foot"><span class="status-dot"></span><div><strong>System ready</strong><small>TF-IDF + Logistic Regression</small></div></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-button" id="menuButton" aria-label="Open menu">☰</button>
+      <div><p class="eyebrow">SENTIMENT WORKSPACE</p><h1 id="pageTitle">Good morning</h1></div>
+      <div class="top-actions"><span class="live-badge"><i></i> Live model</span><div class="avatar">AR</div></div>
+    </header>
+
+    <section class="page active" id="home">
+      <div class="hero-card">
+        <div class="hero-copy"><span class="pill">AI-powered insights</span><h2>Turn customer language into clear decisions.</h2><p>Understand sentiment, detect emotion, and uncover the aspects that shape product satisfaction.</p><button class="primary-button" data-go="analyzer">Analyze a review <span>→</span></button></div>
+        <div class="hero-orbit"><div class="orbit-ring ring-one"></div><div class="orbit-ring ring-two"></div><div class="hero-score"><strong id="homeAccuracy">72.8%</strong><span>model accuracy</span></div></div>
+      </div>
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-icon violet">✦</div><div><span>Reviews analyzed</span><strong id="totalReviews">—</strong></div><small class="trend">Dataset</small></article>
+        <article class="stat-card"><div class="stat-icon green">↗</div><div><span>Positive sentiment</span><strong id="positiveRate">—</strong></div><small class="trend">Share</small></article>
+        <article class="stat-card"><div class="stat-icon amber">★</div><div><span>Average rating</span><strong id="averageRating">—</strong></div><small class="trend">Out of 5</small></article>
+      </div>
+      <div class="content-grid">
+        <article class="panel"><div class="panel-head"><div><p class="eyebrow">OVERVIEW</p><h3>Sentiment distribution</h3></div></div><div class="chart-wrap"><canvas id="homeChart"></canvas></div></article>
+        <article class="panel quick-panel"><div class="panel-head"><div><p class="eyebrow">QUICK ACTION</p><h3>Analyze new feedback</h3></div></div><textarea id="quickReview" placeholder="Paste a customer review here..."></textarea><button class="secondary-button" id="quickAnalyze">Run analysis</button></article>
+      </div>
+    </section>
+
+    <section class="page" id="analyzer">
+      <div class="split-layout">
+        <article class="panel analyzer-input"><p class="eyebrow">SINGLE REVIEW</p><h2>What did the customer say?</h2><label for="reviewText">Review text</label><textarea id="reviewText" placeholder="The camera is excellent, but the battery life is disappointing..."></textarea><label>Optional star rating</label><div class="rating-picker" id="ratingPicker"><button data-rating="1">1</button><button data-rating="2">2</button><button data-rating="3">3</button><button data-rating="4">4</button><button data-rating="5">5</button></div><button class="primary-button full" id="analyzeButton">Analyze sentiment <span>→</span></button></article>
+        <article class="panel results-panel" id="analysisResults"><div class="empty-state"><div class="empty-icon">✦</div><h3>Ready for insight</h3><p>Add a review and run the analysis to see its sentiment, emotion, confidence, and product aspects.</p></div></article>
+      </div>
+    </section>
+
+    <section class="page" id="bulk">
+      <article class="panel"><div class="panel-head"><div><p class="eyebrow">BATCH PROCESSING</p><h3>Analyze a CSV file</h3></div></div><label class="drop-zone" id="dropZone"><input type="file" id="bulkFile" accept=".csv"><span class="upload-icon">⇧</span><strong>Drop a CSV here or browse</strong><small>Column required: <code>text</code> or <code>review_text</code></small></label><div id="bulkResults" class="bulk-results empty-state"><p>Upload a file to begin.</p></div></article>
+    </section>
+
+    <section class="page" id="analytics">
+      <div class="stats-grid"><article class="stat-card"><div class="stat-icon violet">Σ</div><div><span>Total reviews</span><strong id="analyticsTotal">—</strong></div></article><article class="stat-card"><div class="stat-icon green">↗</div><div><span>Positive</span><strong id="analyticsPositive">—</strong></div></article><article class="stat-card"><div class="stat-icon red">↘</div><div><span>Negative</span><strong id="analyticsNegative">—</strong></div></article></div>
+      <div class="content-grid"><article class="panel"><div class="panel-head"><h3>Sentiment mix</h3></div><div class="chart-wrap"><canvas id="analyticsChart"></canvas></div></article><article class="panel"><div class="panel-head"><h3>Dataset health</h3></div><div id="healthDetails" class="detail-list"></div></article></div>
+    </section>
+
+    <section class="page" id="comparison">
+      <article class="panel"><div class="panel-head"><div><p class="eyebrow">PRODUCT COMPARISON</p><h3>Compare review performance</h3></div><button class="secondary-button" id="runComparison">Compare</button></div><label for="productSelect">Choose products</label><select id="productSelect" multiple size="6"></select><small class="hint">Use Ctrl/Cmd to select multiple products.</small></article>
+      <div class="content-grid compact"><article class="panel"><div class="panel-head"><h3>Average rating</h3></div><div class="chart-wrap"><canvas id="comparisonChart"></canvas></div></article><article class="panel"><div class="panel-head"><h3>Results</h3></div><div id="comparisonTable"></div></article></div>
+    </section>
+
+    <section class="page" id="model">
+      <article class="panel"><div class="panel-head"><div><p class="eyebrow">EVALUATION</p><h3>Model performance</h3></div></div><div class="chart-wrap model-chart"><canvas id="modelChart"></canvas></div><div class="table-scroll"><table id="modelTable"><thead><tr><th>Model</th><th>Accuracy</th><th>Macro F1</th><th>Precision</th><th>Recall</th></tr></thead><tbody></tbody></table></div></article>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
